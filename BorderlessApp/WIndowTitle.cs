@@ -18,8 +18,6 @@ namespace BorderlessApp
         MinimizeButton _minimizeButton;
         FlowLayoutPanel _buttonsPannel;
 
-        bool _mousePressed = false;
-
         public TitleBar()
         {
             InitializeComponent();
@@ -79,6 +77,43 @@ namespace BorderlessApp
 
         #endregion
 
+        protected override void WndProc(ref Message m)
+        {
+            bool handled = false;
+
+            switch(m.Msg)
+            {
+                case (int)WinApi.WM_LBUTTONDBLCLK:
+                    {
+                        WinApi.SendMessage(_ownerForm.Handle, (int)WinApi.WM_NCLBUTTONDBLCLK, WinApi.HT_CAPTION, 0);
+                        handled = true;
+                        break;
+                    }
+                case (int)WinApi.WM_LBUTTONDOWN:
+                    {
+                        WinApi.SendMessage(_ownerForm.Handle, (int)WinApi.WM_NCLBUTTONDOWN, WinApi.HT_CAPTION, 0);
+                        handled = true;
+                        break;
+                    }
+                case (int)WinApi.WM_RBUTTONDOWN:
+                    {
+                        WinApi.SendMessage(_ownerForm.Handle, (int)WinApi.WM_NCRBUTTONDOWN, WinApi.HT_CAPTION, 0);
+                        handled = true;
+                        break;
+                    }
+                    break;
+                case (int)WinApi.WM_RBUTTONUP:
+                    {
+                        WinApi.SendMessage(_ownerForm.Handle, (int)WinApi.WM_NCRBUTTONUP, WinApi.HT_CAPTION, 0);
+                        handled = true;
+                        break;
+                    }
+            }
+
+            if(!handled)
+                base.WndProc(ref m);
+        }
+
         #region Button handlers
         private void MaximizeButtonClick(object sender, EventArgs e)
         {
@@ -100,11 +135,14 @@ namespace BorderlessApp
 
         private void CloseButtonClick(object sender, EventArgs e)
         {
-            while (_ownerForm.Size.Width > 2 && _ownerForm.Size.Height > 2)
-            {
-                _ownerForm.Location = new Point(_ownerForm.Location.X + 1, _ownerForm.Location.Y + 1);
-                _ownerForm.Size = new Size(_ownerForm.Size.Width - 2, _ownerForm.Size.Height - 2);
-            }
+            //if (_ownerForm.WindowState != FormWindowState.Maximized)
+            //{
+            //    while (_ownerForm.Size.Width > 2 && _ownerForm.Size.Height > 2)
+            //    {
+            //        _ownerForm.Location = new Point(_ownerForm.Location.X + 1, _ownerForm.Location.Y + 1);
+            //        _ownerForm.Size = new Size(_ownerForm.Size.Width - 2, _ownerForm.Size.Height - 2);
+            //    }
+            //}
             _ownerForm.Close();
         }
 
@@ -117,42 +155,6 @@ namespace BorderlessApp
             base.OnSizeChanged(e);
 
             _buttonsPannel.Location = new Point(Right - _buttonsPannel.Width, 0);
-        }
-
-        protected override void OnGotFocus(EventArgs e)
-        {
-            //base.OnGotFocus(e);
-        }
-
-        protected override void OnLostFocus(EventArgs e)
-        {
-            //base.OnLostFocus(e);
-        }
-
-        protected override void OnDoubleClick(EventArgs e)
-        {
-            if (_ownerForm.WindowState != FormWindowState.Maximized)
-                _ownerForm.WindowState = FormWindowState.Maximized;
-            else
-                _ownerForm.WindowState = FormWindowState.Normal;
-        }
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Left)
-                _mousePressed = true;
-            base.OnMouseDown(e);
-        }
-
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            _mousePressed = false;
-            base.OnMouseUp(e);
-        }
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            //base.OnMouseMove(e);
         }
 
         #endregion

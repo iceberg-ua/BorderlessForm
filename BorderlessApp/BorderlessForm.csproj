@@ -66,6 +66,7 @@
     <Compile Include="TitleButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinApi.cs" />
     <Compile Include="WIndowTitle.cs">
       <SubType>UserControl</SubType>
     </Compile>

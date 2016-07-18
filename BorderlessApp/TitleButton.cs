@@ -18,7 +18,7 @@ namespace BorderlessApp
             Size = new Size(40, 18);
             FlatAppearance.BorderSize = 0;
             FlatStyle = FlatStyle.Flat;
-            BackColor = Color.LightSeaGreen;
+            BackColor = Color.FromArgb(50, 50, 50);
         }
 
         protected override bool ShowFocusCues
