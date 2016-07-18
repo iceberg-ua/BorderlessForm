@@ -125,13 +125,13 @@ namespace BorderlessApp
 
         private void MinimizeButtonClick(object sender, EventArgs e)
         {
-            Size size = _ownerForm.Size;
-            if (_ownerForm.WindowState != FormWindowState.Maximized)
-            {
+            //int flags = ((int)WinApi.ActivateWindowFlags.AW_HIDE | (int)WinApi.ActivateWindowFlags.AW_BLEND |
+            //             (int)WinApi.ActivateWindowFlags.AW_VER_POSITIVE | (int)WinApi.ActivateWindowFlags.AW_HOR_NEGATIVE | (int)WinApi.ActivateWindowFlags.AW_HOR_POSITIVE);
 
-            }
-            _ownerForm.WindowState = FormWindowState.Minimized;
-        }
+            //bool result = WinApi.AnimateWindow(_ownerForm.Handle, 200, flags);
+
+            WinApi.ShowWindow((int)_ownerForm.Handle, WinApi.SW_MINIMIZE);
+         }
 
         private void CloseButtonClick(object sender, EventArgs e)
         {

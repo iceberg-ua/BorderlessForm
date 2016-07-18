@@ -57,39 +57,50 @@ namespace BorderlessApp
             BackColor = Color.FromArgb(255, 0, 191, 255);
         }
 
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams createParams = new CreateParams();
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        CreateParams createParams = new CreateParams();
 
-                createParams.X = 100;
-                createParams.Y = 100;
-                createParams.Width = 700;
-                createParams.Height = 500;
+        //        createParams.Width = 700;
+        //        createParams.Height = 500;
 
-                //createParams.Style |= ((int)WinApi.WindowStyles.WS_MINIMIZEBOX);
-
-                createParams.ExStyle |= ((int)WinApi.WindowExStyles.WS_EX_APPWINDOW | (int)WinApi.WindowExStyles.WS_EX_CONTROLPARENT);
-                return createParams;
-            }
-        }
+        //        //createParams.Style |= ((int)WinApi.WindowStyles.WS_MINIMIZEBOX | (int)WinApi.WindowStyles.WS_CLIPCHILDREN | (int)WinApi.WindowStyles.WS_MAXIMIZEBOX);
+        //        //createParams.ExStyle |= ((int)WinApi.WindowExStyles.WS_EX_APPWINDOW | (int)WinApi.WindowExStyles.WS_EX_CONTROLPARENT);
+        //        return createParams;
+        //    }
+        //}
 
         protected override void WndProc(ref Message m)
         {
             switch(m.Msg)
             {
                 case (int)WinApi.WM_SIZE:
-                    if((int)m.WParam == 2)
                     {
-                        //hide window border when window is maximized
-                        Padding = Padding.Empty;
-                        WindowState = FormWindowState.Maximized;
+                        if ((int)m.WParam == 2)
+                            //hide window border when window is maximized
+                            Padding = Padding.Empty;
+                        else if ((int)m.WParam == 0)
+                            Padding = _borderPadding;
                         break;
                     }
-                    else if((int)m.WParam == 0)
+                case (int)WinApi.WM_SYSCOMMAND:
+                    if((int)m.WParam == WinApi.SC_RESTORE)
                     {
-                        Padding = _borderPadding;
+                        //workaround for restoring window effect
+                        FormBorderStyle = FormBorderStyle.Sizable;
+                        base.WndProc(ref m);
+                        FormBorderStyle = FormBorderStyle.None;
+                        
+                        //woraround for restoring maximized window. Shift window to (0,0)
+                        if(WindowState == FormWindowState.Maximized)
+                            WinApi.SetWindowPos(Handle, IntPtr.Zero, 0, 0, MaximizedBounds.Width, MaximizedBounds.Height, (uint)64);
+
+                        return;
+                    }
+                    else if((int)m.WParam == WinApi.SC_MINIMIZE)
+                    {
                     }
                     break;
             }
@@ -99,7 +110,6 @@ namespace BorderlessApp
         protected override void OnLocationChanged(EventArgs e)
         {
             base.OnLocationChanged(e);
-
             //change maximized bounds if window was moved to other screen
             MaximizedBounds = Screen.FromControl(this).WorkingArea;
         }

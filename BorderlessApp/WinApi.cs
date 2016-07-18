@@ -15,6 +15,8 @@ namespace BorderlessApp
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+        [DllImport("user32.dll")]
+        public static extern bool AnimateWindow(IntPtr hWnd, int time, int flags);
 
         #region Windows messages
 
@@ -239,6 +241,9 @@ namespace BorderlessApp
 
         #endregion
 
+        public const int SC_RESTORE = 0xF120;
+        public const int SC_MINIMIZE = 0xF020;
+
         internal enum WindowStyles : uint
         {
             WS_OVERLAPPED = 0x00000000,
@@ -297,6 +302,43 @@ namespace BorderlessApp
             WS_EX_LAYERED = 0x00080000,
             WS_EX_COMPOSITED = 0x02000000
         }
+
+        internal enum ActivateWindowFlags : int
+        {
+            AW_ACTIVATE = 0x00020000,
+            AW_BLEND = 0x00080000,
+            AW_CENTER = 0x00000010,
+            AW_HIDE = 0x00010000,
+            AW_HOR_POSITIVE = 0x00000001,
+            AW_HOR_NEGATIVE = 0x00000002,
+            AW_SLIDE = 0x00040000,
+            AW_VER_POSITIVE = 0x00000004,
+            AW_VER_NEGATIVE = 0x00000008
+        }
+
+        [DllImport("user32.dll")]
+        public static extern int FindWindow(string className, string windowText);
+        [DllImport("user32.dll")]
+        public static extern int ShowWindow(int hwnd, int command);
+        [DllImport("user32.dll")]
+        public static extern void SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
+                 int X, int Y, int width, int height, uint flags);
+
+        internal const int SW_HIDE = 0;
+        internal const int SW_SHOWNORMAL = 1;
+        internal const int SW_NORMAL = 1;
+        internal const int SW_SHOWMINIMIZED = 2;
+        internal const int SW_SHOWMAXIMIZED = 3;
+        internal const int SW_MAXIMIZE = 3;
+        internal const int SW_SHOWNOACTIVATE = 4;
+        internal const int SW_SHOW = 5;
+        internal const int SW_MINIMIZE = 6;
+        internal const int SW_SHOWMINNOACTIVE = 7;
+        internal const int SW_SHOWNA = 8;
+        internal const int SW_RESTORE = 9;
+        internal const int SW_SHOWDEFAULT = 10;
+        internal const int SW_FORCEMINIMIZE = 11;
+        internal const int SW_MAX = 11;
 
     }
 }
