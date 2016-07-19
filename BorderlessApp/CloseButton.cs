@@ -19,18 +19,5 @@ namespace BorderlessApp
         {
             BackColor = Color.FromArgb(225, 100, 100);
         }
-
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            base.OnMouseEnter(e);
-            //_backColor = BackColor;
-            //BackColor = Color.FromArgb(225, 100, 100);
-        }
-
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            base.OnMouseLeave(e);
-            //BackColor = _backColor;
-        }
     }
 }

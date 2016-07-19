@@ -15,39 +15,36 @@ namespace BorderlessApp
         public TitleButton()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.Selectable, false);
+
             Size = new Size(40, 18);
             TabStop = false;
             FlatAppearance.BorderSize = 0;
+            FlatAppearance.CheckedBackColor = Color.Transparent;
             FlatStyle = FlatStyle.Flat;
             BackColor = Color.FromArgb(50, 50, 50);
         }
 
-        protected override void WndProc(ref Message m)
+        protected override bool ShowFocusCues
         {
-            if (m.Msg == WinApi.WM_SETFOCUS)
+            get
             {
-                m.Result = (IntPtr)1;
-                return;
+                return false;
             }
-
-            if (m.Msg == WinApi.WM_ACTIVATE)
-                return;
-
-            if (m.Msg == WinApi.WM_MOUSEACTIVATE)
-                return;
-
-            if (m.Msg == WinApi.WM_IME_SELECT)
-                return;
-
-            if (m.Msg == WinApi.WM_NCPAINT)
-                return;
-
-            base.WndProc(ref m);
         }
 
-        protected override void OnGotFocus(EventArgs e)
+        protected override void WndProc(ref Message m)
         {
-            //base.OnGotFocus(e);
+            switch((uint)m.Msg)
+            {
+                case WinApi.WM_ACTIVATE:
+                case WinApi.WM_NCACTIVATE:
+                case WinApi.WM_SETFOCUS:
+                case WinApi.WM_MOUSEACTIVATE:
+                    return;
+            }
+
+            base.WndProc(ref m);
         }
     }
 }

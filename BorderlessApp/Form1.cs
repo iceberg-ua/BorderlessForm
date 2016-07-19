@@ -13,22 +13,21 @@ namespace BorderlessApp
     public partial class BorderlessForm : Form
     {
 
-        int borderThickness = 2;
+        int borderThickness = 1;
         Padding _borderPadding;
         TitleBar _title;
         Panel _contentPanel;
-        FlowLayoutPanel _layout = new FlowLayoutPanel();
+        TableLayoutPanel _layout = new TableLayoutPanel();
 
         public BorderlessForm()
         {
             InitializeComponent();
 
-            //_layout.Dock = DockStyle.Fill;
-            //_layout.FlowDirection = FlowDirection.TopDown;
-            //_layout.BackColor = SystemColors.ControlDarkDark;
-            //_layout.Padding = Padding.Empty;
-            //_layout.Margin = Padding.Empty;
-            //Controls.Add(_layout);
+            _layout.Dock = DockStyle.Fill;
+            _layout.BackColor = SystemColors.ControlDarkDark;
+            _layout.Padding = Padding.Empty;
+            _layout.Margin = Padding.Empty;
+            Controls.Add(_layout);
 
             _borderPadding = new Padding(borderThickness);
 
@@ -39,7 +38,8 @@ namespace BorderlessApp
             _title.Margin = Padding.Empty;
             _title.Height = 30;
             _title.Dock = DockStyle.Top;
-            _title.BackColor = Color.FromArgb(45,45,45);
+            //_title.BackColor = Color.FromArgb(45,45,45);
+            _title.BackColor = Color.LightGray;
 
             _contentPanel = new Panel();
             _contentPanel.Padding = new Padding(5);
@@ -48,11 +48,11 @@ namespace BorderlessApp
             _contentPanel.BackColor = SystemColors.ControlDark;
             _contentPanel.BorderStyle = BorderStyle.FixedSingle;
 
-            //_layout.Controls.Add(_title);
-            //_layout.Controls.Add(_contentPanel);
+            _layout.Controls.Add(_title);
+            _layout.Controls.Add(_contentPanel);
 
-            Controls.Add(_title);
-            Controls.Add(_contentPanel);
+            //Controls.Add(_title);
+            //Controls.Add(_contentPanel);
 
             BackColor = Color.FromArgb(255, 0, 191, 255);
         }
@@ -102,6 +102,9 @@ namespace BorderlessApp
                     else if((int)m.WParam == WinApi.SC_MINIMIZE)
                     {
                     }
+                    break;
+                case (int)WinApi.WM_MOUSEHOVER:
+
                     break;
             }
             base.WndProc(ref m);

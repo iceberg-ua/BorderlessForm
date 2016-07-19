@@ -21,12 +21,13 @@ namespace BorderlessApp
         public TitleBar()
         {
             InitializeComponent();
+            SetStyle(ControlStyles.Selectable, false);
 
             _buttonsPannel = new FlowLayoutPanel();
             _buttonsPannel.Size = Size.Empty;
             _buttonsPannel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             _buttonsPannel.AutoSize = true;
-            _buttonsPannel.BackColor = Color.Black;
+            _buttonsPannel.BackColor = Color.LightGray;
             _buttonsPannel.Padding = new Padding(1,0,1,1);
 
             _closeButton = new CloseButton();
@@ -101,10 +102,15 @@ namespace BorderlessApp
                         handled = true;
                         break;
                     }
-                    break;
                 case (int)WinApi.WM_RBUTTONUP:
                     {
                         WinApi.SendMessage(_ownerForm.Handle, (int)WinApi.WM_NCRBUTTONUP, WinApi.HT_CAPTION, 0);
+                        handled = true;
+                        break;
+                    }
+                case (int)WinApi.WM_ACTIVATE:
+                    {
+                        WinApi.SendMessage(_ownerForm.Handle, (int)WinApi.WM_NCACTIVATE, WinApi.HT_CAPTION, 0);
                         handled = true;
                         break;
                     }
